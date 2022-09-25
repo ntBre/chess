@@ -1,6 +1,11 @@
-use std::fmt::Display;
+use std::{
+    fmt::Display,
+    ops::{Index, IndexMut},
+};
 
 use crate::{piece::Piece, piece::PieceType, piece::Player, square::Square};
+
+use crate::coord::AlgebraicCoord;
 
 pub(crate) struct Board([[Square; 8]; 8]);
 
@@ -36,6 +41,36 @@ impl Board {
                 Square::new(Piece::new(White, Rook)),
             ],
         ])
+    }
+
+    /// evaluate the position represented by `self`
+    pub(crate) fn evaluate(&self) -> f64 {
+        self.pieces().iter().map(|p| p.value()).sum()
+    }
+
+    /// return an iterator over the pieces in `self`
+    pub(crate) fn pieces(&self) -> Vec<Piece> {
+        let mut v = Vec::with_capacity(64);
+        for row in self.0 {
+            v.extend(row.iter().filter_map(|s| s.piece));
+        }
+        v
+    }
+}
+
+impl Index<AlgebraicCoord> for Board {
+    type Output = Square;
+
+    fn index(&self, index: AlgebraicCoord) -> &Self::Output {
+        let (i, j) = index.into();
+        &self.0[i][j]
+    }
+}
+
+impl IndexMut<AlgebraicCoord> for Board {
+    fn index_mut(&mut self, index: AlgebraicCoord) -> &mut Self::Output {
+        let (i, j) = index.into();
+        &mut self.0[i][j]
     }
 }
 
