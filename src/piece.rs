@@ -1,12 +1,14 @@
 use std::fmt::Display;
 
-#[derive(Clone, Copy, Debug)]
+use crate::{coord::AlgebraicCoord, Move};
+
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) enum Player {
     White,
     Black,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) enum PieceType {
     King,
     Queen,
@@ -16,7 +18,7 @@ pub(crate) enum PieceType {
     Pawn,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) struct Piece {
     pub(crate) player: Player,
     pub(crate) piece: PieceType,
@@ -41,6 +43,46 @@ impl Piece {
             PieceType::Pawn => 1.0,
         };
         fac * value
+    }
+
+    /// return all of the legal moves for a piece, disregarding the board state
+    pub(crate) fn moves(&self, coord: AlgebraicCoord) -> Vec<Move> {
+        let mut ret = Vec::new();
+        match self.piece {
+            PieceType::King => {
+                let (i, j) = coord.into();
+                if i < 7 && j < 7 {
+                    ret.push(Move::new(*self, (i + 1, j + 1)));
+                }
+                if i < 7 && j > 0 {
+                    ret.push(Move::new(*self, (i + 1, j - 1)));
+                }
+                if i < 7 {
+                    ret.push(Move::new(*self, (i + 1, j)));
+                }
+                if j < 7 {
+                    ret.push(Move::new(*self, (i, j + 1)));
+                }
+                if i > 0 && j > 0 {
+                    ret.push(Move::new(*self, (i - 1, j - 1)));
+                }
+                if i > 0 && j < 7 {
+                    ret.push(Move::new(*self, (i - 1, j + 1)));
+                }
+                if j > 0 {
+                    ret.push(Move::new(*self, (i, j - 1)));
+                }
+                if i > 0 {
+                    ret.push(Move::new(*self, (i - 1, j)));
+                }
+            }
+            PieceType::Queen => todo!(),
+            PieceType::Rook => todo!(),
+            PieceType::Bishop => todo!(),
+            PieceType::Knight => todo!(),
+            PieceType::Pawn => todo!(),
+        }
+        ret
     }
 }
 

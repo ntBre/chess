@@ -1,12 +1,4 @@
-use board::Board;
-
-mod board;
-mod coord;
-mod piece;
-mod square;
-
-#[cfg(test)]
-mod tests;
+use chess::board::Board;
 
 fn main() {
     let board = Board::starting_position();

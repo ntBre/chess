@@ -3,14 +3,16 @@ use std::{
     ops::{Index, IndexMut},
 };
 
-use crate::{piece::Piece, piece::PieceType, piece::Player, square::Square};
+use crate::{
+    piece::Piece, piece::PieceType, piece::Player, square::Square, Move,
+};
 
 use crate::coord::AlgebraicCoord;
 
-pub(crate) struct Board([[Square; 8]; 8]);
+pub struct Board([[Square; 8]; 8]);
 
 impl Board {
-    pub(crate) fn starting_position() -> Self {
+    pub fn starting_position() -> Self {
         use PieceType::*;
         use Player::*;
         Self([
@@ -44,17 +46,34 @@ impl Board {
     }
 
     /// evaluate the position represented by `self`
-    pub(crate) fn evaluate(&self) -> f64 {
-        self.pieces().iter().map(|p| p.value()).sum()
+    pub fn evaluate(&self) -> f64 {
+        self.pieces().iter().map(|p| p.0.value()).sum()
     }
 
-    /// return an iterator over the pieces in `self`
-    pub(crate) fn pieces(&self) -> Vec<Piece> {
+    /// return a Vec of ([Piece], [Square]) pairs
+    pub(crate) fn pieces(&self) -> Vec<(Piece, AlgebraicCoord)> {
         let mut v = Vec::with_capacity(64);
-        for row in self.0 {
-            v.extend(row.iter().filter_map(|s| s.piece));
+        for (i, row) in self.0.iter().enumerate() {
+            for (j, square) in row.iter().enumerate() {
+                if let Some(s) = square.piece {
+                    v.push((s, AlgebraicCoord::from((i, j))));
+                }
+            }
         }
         v
+    }
+
+    /// return a list of all the legal moves available for `player`
+    fn moves(&self, player: Player) -> Vec<Move> {
+        let mut ret = Vec::new();
+        for (piece, coord) in
+            self.pieces().iter().filter(|p| p.0.player == player)
+        {
+            // generate the list of all "legal" moves and then prune them based
+            // on the board state, i.e. pieces in the way
+            let moves = piece.moves(*coord);
+        }
+        ret
     }
 }
 
