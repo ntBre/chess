@@ -1,8 +1,6 @@
 use std::fmt::Display;
 
-use crate::{
-    piece::Piece, piece::PieceType, piece::Player, square::Square,
-};
+use crate::{piece::Piece, piece::PieceType, piece::Player, square::Square};
 
 pub(crate) struct Board([[Square; 8]; 8]);
 
@@ -12,22 +10,6 @@ impl Board {
         use Player::*;
         Self([
             [
-                Square::new(Piece::new(White, Rook)),
-                Square::new(Piece::new(White, Knight)),
-                Square::new(Piece::new(White, Bishop)),
-                Square::new(Piece::new(White, Queen)),
-                Square::new(Piece::new(White, King)),
-                Square::new(Piece::new(White, Bishop)),
-                Square::new(Piece::new(White, Knight)),
-                Square::new(Piece::new(White, Rook)),
-            ],
-            [Square::new(Piece::new(White, Pawn)); 8],
-            [Square::none(); 8],
-            [Square::none(); 8],
-            [Square::none(); 8],
-            [Square::none(); 8],
-            [Square::new(Piece::new(Black, Pawn)); 8],
-            [
                 Square::new(Piece::new(Black, Rook)),
                 Square::new(Piece::new(Black, Knight)),
                 Square::new(Piece::new(Black, Bishop)),
@@ -36,6 +18,22 @@ impl Board {
                 Square::new(Piece::new(Black, Bishop)),
                 Square::new(Piece::new(Black, Knight)),
                 Square::new(Piece::new(Black, Rook)),
+            ],
+            [Square::new(Piece::new(Black, Pawn)); 8],
+            [Square::none(); 8],
+            [Square::none(); 8],
+            [Square::none(); 8],
+            [Square::none(); 8],
+            [Square::new(Piece::new(White, Pawn)); 8],
+            [
+                Square::new(Piece::new(White, Rook)),
+                Square::new(Piece::new(White, Knight)),
+                Square::new(Piece::new(White, Bishop)),
+                Square::new(Piece::new(White, Queen)),
+                Square::new(Piece::new(White, King)),
+                Square::new(Piece::new(White, Bishop)),
+                Square::new(Piece::new(White, Knight)),
+                Square::new(Piece::new(White, Rook)),
             ],
         ])
     }

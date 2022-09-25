@@ -18,14 +18,13 @@ pub(crate) enum PieceType {
 
 #[derive(Clone, Copy)]
 pub(crate) struct Piece {
-    #[allow(unused)]
-    pub(crate) owner: Player,
+    pub(crate) player: Player,
     pub(crate) piece: PieceType,
 }
 
 impl Piece {
-    pub(crate) fn new(owner: Player, piece: PieceType) -> Self {
-        Self { owner, piece }
+    pub(crate) fn new(player: Player, piece: PieceType) -> Self {
+        Self { player, piece }
     }
 }
 
@@ -33,7 +32,7 @@ impl Display for Piece {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "{:^3}",
+            " {}{}",
             match self.piece {
                 PieceType::King => "K",
                 PieceType::Queen => "Q",
@@ -41,6 +40,10 @@ impl Display for Piece {
                 PieceType::Bishop => "B",
                 PieceType::Knight => "N",
                 PieceType::Pawn => "P",
+            },
+            match self.player {
+                Player::White => " ",
+                Player::Black => "*",
             }
         )
     }
